@@ -16,10 +16,5 @@ namespace Petricite
                 filter.value.Add(this);
             }
         }
-
-        public override bool CanAcceptCard(Card card)
-        {
-            return true;
-        }
     }
 }

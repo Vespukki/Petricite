@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Petricite
 {
-    public abstract class Zone : IChoosable
+    public class Zone : IChoosable
     {
         public string ChoiceName => name;
 
@@ -26,7 +26,5 @@ namespace Petricite
         {
 
         }
-
-        public abstract bool CanAcceptCard(Card card);
     }
 }

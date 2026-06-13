@@ -1,10 +1,14 @@
+using System;
+
 namespace Petricite
 {
     public class Card
     {
-        protected string name;
-        private bool exhausted;
+        public string name;
         private Zone zone;
+
+        public static event Action<Card, Zone> OnZoneChange;
+
         public Card(Zone zone, string name = "UNNAMED CARD")
         {
             this.name = name;
@@ -19,8 +23,8 @@ namespace Petricite
             }
             set
             {
-                //HERE IS WHERE I WILL DO AN EVENT TO SEE IF ANYONE OBJECTS TO THE MOVE
                 zone = value;
+                OnZoneChange?.Invoke(this, value);
             }
         }
 

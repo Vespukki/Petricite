@@ -2,19 +2,25 @@ using UnityEngine;
 
 namespace Petricite
 {
-    public class Unit : PlayableCard
+    public class Unit : Permanent
     {
         protected int might;
-        public Unit(Zone zone, string name = "UNNAMED PLAYABLE CARD", int powerCost = 0, int energyCost = 0, int might = 0) : base(zone, name, powerCost, energyCost)
+        
+        public delegate void unitHandler(Unit unit);
+        public static event unitHandler OnUnitPlayed;
+
+        public Unit(Zone zone, Player controller, string name = "UNNAMED PLAYABLE CARD", int powerCost = 0, int energyCost = 0, int might = 0) : base(zone,controller, name, powerCost, energyCost)
         {
             this.might = might;
+
+            OnUnitPlayed?.Invoke(this);
         }
 
         public int GetMight()
         {
             var query = new Query<int, Card>(this, "MIGHT", might);
 
-            GameEvents<int, Card>.RaiseQuery(query);
+            Query<int, Card>.RaiseQuery(query);
 
             return query.value;
         }
