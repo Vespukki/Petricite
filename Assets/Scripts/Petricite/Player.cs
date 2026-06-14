@@ -6,7 +6,7 @@ namespace Petricite
     public class Player : IChoosable
     {
         private string name;
-        public string ChoiceName => name;
+        public string Name => name;
 
         private List<Protocard> protoCards;
 

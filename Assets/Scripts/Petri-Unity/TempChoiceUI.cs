@@ -39,12 +39,14 @@ namespace Petrunity
 
             title.SetText(choiceTitle);
 
-
+            //IMPORTANT TO NOTE THAT CHOICE CAN BE NULL
             foreach (var choice in choices)
             {
+                var choiceName = choice == null ? "Done" : choice.Name;
+
                 var button = Instantiate(choiceButtonPrefab, buttonHolder).GetComponent<Button>();
                 button.gameObject.SetActive(true);
-                button.GetComponentInChildren<TextMeshProUGUI>().SetText(choice.ChoiceName);
+                button.GetComponentInChildren<TextMeshProUGUI>().SetText(choiceName);
 
                 button.onClick.AddListener(() => ChoiceManager.Choose(choice));
 

@@ -78,13 +78,13 @@ namespace Petrunity
 
             foreach (var pair in zoneToTransform)
             {
-                Debug.Log(pair.Key.ChoiceName + " " + pair.Value.name);
+                Debug.Log(pair.Key.Name + " " + pair.Value.name);
             }
         }
 
         private void Start()
         {
-            playArea.aliceCard.StandardMove();
+            CommandManager.EnqueueCommand(new StandardMoveCommand());
         }
     }
 }

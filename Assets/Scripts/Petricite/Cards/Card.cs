@@ -2,9 +2,11 @@ using System;
 
 namespace Petricite
 {
-    public class Card
+    public class Card : IChoosable
     {
         public string name;
+        public string Name => name;
+
         private Zone zone;
 
         public static event Action<Card, Zone> OnZoneChange;

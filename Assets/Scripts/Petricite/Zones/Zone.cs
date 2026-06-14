@@ -5,7 +5,7 @@ namespace Petricite
 {
     public class Zone : IChoosable
     {
-        public string ChoiceName => name;
+        public string Name => name;
 
         public string name;
         private int maxCards;

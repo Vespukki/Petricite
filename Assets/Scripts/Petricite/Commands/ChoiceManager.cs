@@ -15,6 +15,9 @@ namespace Petricite
         /// </summary>
         private static IChoosable chosen;
 
+        private static bool choiceMade = false;
+        public static bool currentlyChoosing = false;
+
         public delegate void choiceDelegate(IEnumerable<IChoosable> choices, string choiceTitle);
         public static event choiceDelegate OnChoices;
         public static event Action<IChoosable> OnChosen;
@@ -34,19 +37,23 @@ namespace Petricite
         private void TempRandomChoice(IEnumerable<IChoosable> choices, string title)
         {
             var rand = new System.Random();
-            Debug.Log(choices.ToList().Count); //ok next thing to do is link choice to next command and also fix bug where theres compounding choices every time filter is run.
+            Debug.Log(choices.ToList().Count);
             Choose(choices.ToList()[rand.Next(choices.ToList().Count)]);
         }
 
-        public static async Task<T> DoChoice<T>(IEnumerable<T> options, string title)
+        public static async Task<T> DoChoice<T>(IEnumerable<T> options, string title) where T : class, IChoosable
         {
+            currentlyChoosing = true;
             OnChoices?.Invoke((IEnumerable<IChoosable>)options, title);
-            await WaitForChoice(); //beyond here chosen != null
-            Debug.Log($"Choice made!! we chose {chosen.ChoiceName}");
+            await WaitForChoice(); //beyond here chosen is the value
+            Debug.Log($"Choice made!! we chose {chosen?.Name}");
 
             OnChosen?.Invoke(chosen);
             IChoosable final = chosen;
             chosen = null;
+            choiceMade = false;
+
+            currentlyChoosing = false;
 
             return (T)final;
         }
@@ -57,12 +64,13 @@ namespace Petricite
         /// <param name="choice"></param>
         public static void Choose(IChoosable choice)
         {
+            choiceMade = true;
             chosen = choice;
         }
 
         private static async Task WaitForChoice()
         {
-            while (chosen == null)
+            while (choiceMade == false)
             {
                 await Task.Yield();
             }

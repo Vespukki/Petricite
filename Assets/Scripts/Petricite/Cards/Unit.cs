@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Petricite
@@ -12,8 +13,16 @@ namespace Petricite
         public Unit(Zone zone, Player controller, string name = "UNNAMED PLAYABLE CARD", int powerCost = 0, int energyCost = 0, int might = 0) : base(zone,controller, name, powerCost, energyCost)
         {
             this.might = might;
-
+            Filter<Unit>.OnFilter += OnFilter;
             OnUnitPlayed?.Invoke(this);
+        }
+
+        public void OnFilter(Filter<Unit> filter)
+        {
+            if (filter.test(this))
+            {
+                filter.value.Add(this);
+            }
         }
 
         public int GetMight()
@@ -26,15 +35,6 @@ namespace Petricite
         }
 
 
-        public void StandardMove()
-        {
-            Filter<Location> filter = new((loc) => loc.MaxCards > loc.CardCount && loc != Zone);
-            ChoiceCommand<Location> locationChoice = new(filter, $"Where to move {name}?");
-            StandardMoveCommand moveCommand = new(this, locationChoice);
-
-            CommandManager.EnqueueCommand(locationChoice);
-            CommandManager.EnqueueCommand(moveCommand);
-
-        }
+        
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Petricite
 {
@@ -20,19 +21,21 @@ namespace Petricite
             {
                 players.Add(player);
 
-                playerBases.Add(player, new Location($"{player.ChoiceName}'s base", int.MaxValue));
+                playerBases.Add(player, new Location($"{player.Name}'s base", int.MaxValue));
 
                 var newDict = new Dictionary<Battlefield, Zone>();
                 foreach (var battlefield in battlefields)
                 {
-                    newDict.Add(battlefield, new Location($"{player.ChoiceName}'s {battlefield.ChoiceName}", int.MaxValue));
+                    newDict.Add(battlefield, new Location($"{player.Name}'s {battlefield.Name}", int.MaxValue));
                 }
                 playerBattlefields.Add(player, newDict);
             }
 
           
         }
-           
+
+        
+
 
     }
 }

@@ -6,7 +6,7 @@ namespace Petricite
     public class Battlefield : IChoosable
     {
         private string name;
-        public string ChoiceName => name;
+        public string Name => name;
 
         public Battlefield(string name)
         {
