@@ -7,7 +7,7 @@ namespace Petrunity
     public class UGameManager : MonoBehaviour
     {
         public ChoiceManager choiceManager = new();
-        public CommandManager commandManager = new();
+        public CommandManager commandManager;
         public PlayArea playArea;
 
         [SerializeField] private GameObject playerboardPrefab;
@@ -29,6 +29,8 @@ namespace Petrunity
             battlefields.Add(new("The Papertree"));
             playArea = new(players, battlefields);
             ParsePlayArea();
+
+            commandManager = new(players);
 
             Unit.OnUnitPlayed += UnitPlayed;
             Card.OnZoneChange += CardMoved;
@@ -83,6 +85,7 @@ namespace Petrunity
 
         private void Start()
         {
+            CommandManager.StartNextTurn();
             commandManager.ProcessCommand();
 
         }
