@@ -15,10 +15,10 @@ namespace Petricite
         public async Task Execute()//ok so kinda works but now we gotta make mainPhaseCommand ask the player "what u wanna do" instead of just going into a move.
         {
 
-            Choice standardMoveChoice = new(new StandardMoveCommand(), "Standard Move");
+            Choice standardMoveChoice = new(new StandardMoveCommand(player), "Standard Move");
             Choice EndTurnChoice = new(new EndTurnCommand(player), "End Turn");
 
-            ChoiceCommand<Choice> choiceCommand = new(new List<Choice>() {standardMoveChoice, EndTurnChoice }, $"{player.Name}'s Main Phase", false);
+            ChoiceCommand<Choice> choiceCommand = new(player, new List<Choice>() {standardMoveChoice, EndTurnChoice }, $"{player.Name}'s Main Phase", false);
 
 
             await choiceCommand.Execute();

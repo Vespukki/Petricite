@@ -9,8 +9,10 @@ namespace Petricite
         public List<T> selected = new();
         Filter<T>.testDelegate test;
         private int minChoices, maxChoices;
-        public MultichoiceCommand(Filter<T>.testDelegate test, int minChoices, int maxChoices)
+        private Player player;
+        public MultichoiceCommand(Filter<T>.testDelegate test, int minChoices, int maxChoices, Player player)
         {
+            this.player = player;
             this.test = test;
             this.minChoices = minChoices;
             this.maxChoices = maxChoices;
@@ -25,7 +27,7 @@ namespace Petricite
         {
             while (true)
             {
-                FilterChoiceCommand<T> choiceCommand = new(new((obj) => DoTest(obj) ), $"Choose a thing", allowNull:true);
+                FilterChoiceCommand<T> choiceCommand = new(player, new((obj) => DoTest(obj) ), $"Choose a thing", allowNull:true);
                 await choiceCommand.Execute();
                 var result = choiceCommand.result;
 

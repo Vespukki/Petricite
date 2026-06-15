@@ -21,12 +21,12 @@ namespace Petricite
             {
                 players.Add(player);
 
-                playerBases.Add(player, new Location($"{player.Name}'s base", int.MaxValue));
+                playerBases.Add(player, new Location($"{player.Name}'s base", int.MaxValue, player));
 
                 var newDict = new Dictionary<Battlefield, Zone>();
                 foreach (var battlefield in battlefields)
                 {
-                    newDict.Add(battlefield, new Location($"{player.Name}'s {battlefield.Name}", int.MaxValue));
+                    newDict.Add(battlefield, new Location($"{player.Name}'s {battlefield.Name}", int.MaxValue, player));
                 }
                 playerBattlefields.Add(player, newDict);
             }

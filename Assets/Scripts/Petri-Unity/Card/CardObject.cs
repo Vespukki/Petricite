@@ -23,8 +23,25 @@ namespace Petrunity
         {
             ChoiceManager.OnChoices += OnChoices;
             ChoiceManager.OnChosen += OnChosen;
+            Permanent.OnReadyChange += OnReadyChange;
             image = GetComponentInChildren<Image>();
             baseColor = image.color;
+        }
+
+        private void OnReadyChange(Permanent permanent, bool ready)
+        {
+            Debug.Log("ready changed");
+            if (permanent != card) return;
+
+            Vector3 oldRot = transform.rotation.eulerAngles;
+            Quaternion newRot = transform.rotation;
+            if (!ready)
+            {
+                newRot = Quaternion.Euler(new(oldRot.x, oldRot.y, -90));
+            }
+
+            transform.SetLocalPositionAndRotation(transform.position, newRot);
+
         }
 
         private void OnChosen(IChoosable choosable)
@@ -32,7 +49,7 @@ namespace Petrunity
             Unhighlight();
         }
 
-        private void OnChoices(IEnumerable<IChoosable> choices, string choiceTitle)
+        private void OnChoices(IEnumerable<IChoosable> choices, string choiceTitle, Player player)
         {
             if (choices.Contains(card))
             {

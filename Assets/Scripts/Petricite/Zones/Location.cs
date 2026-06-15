@@ -4,7 +4,7 @@ namespace Petricite
 {
     public class Location : Zone
     {
-        public Location(string name, int maxCards) : base(name, maxCards)
+        public Location(string name, int maxCards, Player owner) : base(name, maxCards, owner)
         {
             Filter<Location>.OnFilter += OnFilter;
         }

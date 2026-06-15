@@ -1,15 +1,21 @@
-using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
+using System;
 
 namespace Petricite
 {
     public class Permanent : PlayableCard, IReadyable
     {
-        protected bool ready;
+        protected bool ready = true;
+
+        public static event Action<Permanent,bool> OnReadyChange;
+
         public bool Ready
         {
-            get => ready; 
-            set => ready = value;
+            get => ready;
+            set 
+            {
+                OnReadyChange?.Invoke(this, value);
+                ready = value;
+            } 
             
         }
 

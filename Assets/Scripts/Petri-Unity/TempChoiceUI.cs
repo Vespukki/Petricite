@@ -34,7 +34,7 @@ namespace Petrunity
 
         }
 
-        private void PromptChoices(IEnumerable<IChoosable> choices, string choiceTitle)
+        private void PromptChoices(IEnumerable<IChoosable> choices, string choiceTitle, Player player)
         {
 
             title.SetText(choiceTitle);

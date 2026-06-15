@@ -18,8 +18,7 @@ namespace Petricite
         private static bool choiceMade = false;
         public static bool currentlyChoosing = false;
 
-        public delegate void choiceDelegate(IEnumerable<IChoosable> choices, string choiceTitle);
-        public static event choiceDelegate OnChoices;
+        public static event Action<IEnumerable<IChoosable>, string, Player> OnChoices;
         public static event Action<IChoosable> OnChosen;
 
         public ChoiceManager()
@@ -41,10 +40,10 @@ namespace Petricite
             Choose(choices.ToList()[rand.Next(choices.ToList().Count)]);
         }
 
-        public static async Task<T> DoChoice<T>(IEnumerable<T> options, string title) where T : IChoosable
+        public static async Task<T> DoChoice<T>(Player player, IEnumerable<T> options, string title) where T : IChoosable
         {
             currentlyChoosing = true;
-            OnChoices?.Invoke((IEnumerable<IChoosable>)options, title);
+            OnChoices?.Invoke((IEnumerable<IChoosable>)options, title, player);
             await WaitForChoice(); //beyond here chosen is the value
             Debug.Log($"Choice made!! we chose {chosen?.Name}");
 

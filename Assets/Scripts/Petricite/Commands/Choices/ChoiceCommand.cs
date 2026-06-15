@@ -8,11 +8,12 @@ namespace Petricite
         private List<T> choices;
         private string choiceTitle;
         private bool allowNull;
+        private Player player; //the player making the choice
 
         public T result;
-        public ChoiceCommand(List<T> filter, string choiceTitle, bool allowNull = false)
+        public ChoiceCommand(Player player, List<T> choices, string choiceTitle, bool allowNull = false)
         {
-            this.choices = filter;
+            this.choices = choices;
             this.choiceTitle = choiceTitle;
             this.allowNull = allowNull;
         }
@@ -20,7 +21,7 @@ namespace Petricite
         public async Task Execute()
         {
             if (allowNull) choices.Add(null);
-            result = await ChoiceManager.DoChoice(choices, choiceTitle);
+            result = await ChoiceManager.DoChoice(player, choices, choiceTitle);
         }
 
         public void Unexecute()
