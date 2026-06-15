@@ -5,6 +5,7 @@ namespace Petricite
     public class Card : IChoosable
     {
         public string name;
+        public Player controller;
         public string Name => name;
 
         private Zone zone;

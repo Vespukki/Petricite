@@ -36,7 +36,6 @@ namespace Petrunity
             playArea.aliceCard = new(playArea.playerBases[players[0]], players[0], "Albany", 0, 0, 0);
             playArea.bobCard = new(playArea.playerBases[players[1]], players[1], "Baltimore", 0, 0, 0);
 
-            commandManager.ProcessCommand();
         }
 
         private void UnitPlayed(Unit unit)
@@ -84,7 +83,8 @@ namespace Petrunity
 
         private void Start()
         {
-            CommandManager.EnqueueCommand(new StandardMoveCommand());
+            commandManager.ProcessCommand();
+
         }
     }
 }

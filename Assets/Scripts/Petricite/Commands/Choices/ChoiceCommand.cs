@@ -1,28 +1,26 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Petricite
 {
     public class ChoiceCommand<T> : ICommand where T : class, IChoosable
     {
-        private Filter<T> filter;
+        private List<T> choices;
         private string choiceTitle;
         private bool allowNull;
 
         public T result;
-        public ChoiceCommand(Filter<T> filter, string choiceTitle, bool allowNull = false)
+        public ChoiceCommand(List<T> filter, string choiceTitle, bool allowNull = false)
         {
-            this.filter = filter;
+            this.choices = filter;
             this.choiceTitle = choiceTitle;
             this.allowNull = allowNull;
         }
 
         public async Task Execute()
         {
-            List<T> valid = filter.GetValid();
-            if (allowNull) valid.Add(null);
-            result = await ChoiceManager.DoChoice(valid, choiceTitle);
+            if (allowNull) choices.Add(null);
+            result = await ChoiceManager.DoChoice(choices, choiceTitle);
         }
 
         public void Unexecute()

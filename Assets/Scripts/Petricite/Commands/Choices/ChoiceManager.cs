@@ -41,7 +41,7 @@ namespace Petricite
             Choose(choices.ToList()[rand.Next(choices.ToList().Count)]);
         }
 
-        public static async Task<T> DoChoice<T>(IEnumerable<T> options, string title) where T : class, IChoosable
+        public static async Task<T> DoChoice<T>(IEnumerable<T> options, string title) where T : IChoosable
         {
             currentlyChoosing = true;
             OnChoices?.Invoke((IEnumerable<IChoosable>)options, title);

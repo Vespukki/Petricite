@@ -31,7 +31,7 @@ namespace Petricite
                 playerBattlefields.Add(player, newDict);
             }
 
-          
+
         }
 
         

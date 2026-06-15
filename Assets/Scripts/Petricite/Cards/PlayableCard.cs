@@ -7,7 +7,6 @@ namespace Petricite
     {
         protected int energyCost;
         protected int powerCost;
-        public Player controller;
 
         public delegate void cardPlayedHandler(PlayableCard card);
         public static event cardPlayedHandler OnCardPlayed;

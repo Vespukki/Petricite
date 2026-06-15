@@ -23,7 +23,7 @@ namespace Petricite
         public async Task Execute()
         {
             Filter<Location> filter = new((loc) => loc.MaxCards > loc.CardCount);
-            ChoiceCommand<Location> locationChoice = new(filter, $"Where to move?");
+            FilterChoiceCommand<Location> locationChoice = new(filter, $"Where to move?");
             await locationChoice.Execute();
 
             MultichoiceCommand<Unit> unitChoices = new((unit) => UnitTest(locationChoice.result, unit), 1, int.MaxValue);

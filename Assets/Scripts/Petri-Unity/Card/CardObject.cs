@@ -3,6 +3,8 @@ using Petricite;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Petrunity
 {
@@ -11,7 +13,7 @@ namespace Petrunity
         public Card card;
 
         private Color baseColor;
-        private Color HIGHLIGHT_COLOR = Color.white;
+        private Color HIGHLIGHT_COLOR = Color.cyan;
         private Color LOWLIGHT_COLOR = Color.gray;
         private Image image;
 
@@ -19,8 +21,27 @@ namespace Petrunity
 
         private void Awake()
         {
+            ChoiceManager.OnChoices += OnChoices;
+            ChoiceManager.OnChosen += OnChosen;
             image = GetComponentInChildren<Image>();
             baseColor = image.color;
+        }
+
+        private void OnChosen(IChoosable choosable)
+        {
+            Unhighlight();
+        }
+
+        private void OnChoices(IEnumerable<IChoosable> choices, string choiceTitle)
+        {
+            if (choices.Contains(card))
+            {
+                Highlight();
+            }
+            else
+            {
+                Lowlight();
+            }
         }
 
         protected virtual void OnLeftClick()

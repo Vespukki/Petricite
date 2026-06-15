@@ -21,11 +21,11 @@ namespace Petricite
             return test(obj) && !selected.Contains(obj);
         }
 
-        public async Task Execute() //Ok so now multichoice needs to hide things already selected and also lets add a highlight to the cards that are selected yay
+        public async Task Execute()
         {
             while (true)
             {
-                ChoiceCommand<T> choiceCommand = new(new((obj) => DoTest(obj) ), $"Choose a thing", allowNull:true);
+                FilterChoiceCommand<T> choiceCommand = new(new((obj) => DoTest(obj) ), $"Choose a thing", allowNull:true);
                 await choiceCommand.Execute();
                 var result = choiceCommand.result;
 
