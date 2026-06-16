@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MatchStyleSheet.uss?fileID=7433441132597879392&amp;guid=f8553b6b051a43b49ad52d2328142f41&amp;type=3#MatchStyleSheet"/>
+    <Petrunity.CardElement source="project://database/Assets/Sprites/SFD-180.png?fileID=5344444873274896792&amp;guid=942ae16ac2d9deb48988d731bcac3f93&amp;type=3#SFD-180_0" class="Card"/>
+</ui:UXML>
