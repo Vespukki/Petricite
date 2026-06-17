@@ -1,15 +1,18 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Petricite
 {
-    public class MultichoiceCommand<T> : ICommand where T : class, IChoosable
+    public class MultichoiceCommand<T> : BaseChoiceCommand, ICommand where T : class, IChoosable
     {
         public List<T> selected = new();
         Filter<T>.testDelegate test;
         private int minChoices, maxChoices;
         private Player player;
+
         public MultichoiceCommand(Filter<T>.testDelegate test, int minChoices, int maxChoices, Player player)
         {
             this.player = player;
@@ -34,10 +37,11 @@ namespace Petricite
                 if (result == null) break;
 
                 selected.Add(result);
-
+                InvokeOnNewChoice(result);
                 if (selected.Count >= maxChoices) break;
             }
-            
+
+            InvokeOnChoiceFinished(selected.Cast<IChoosable>().ToList());
         }
 
         public void Unexecute()

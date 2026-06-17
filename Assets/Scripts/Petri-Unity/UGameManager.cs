@@ -1,4 +1,5 @@
 using Petricite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -43,18 +44,44 @@ namespace Petrunity
             Unit.OnUnitPlayed += UnitPlayed;
             Card.OnZoneChange += CardMoved;
 
+            Permanent.OnReadyChange += OnReadyChange;
+
             choiceLabel = document.rootVisualElement.Q<Label>("ChoiceLabel");
             buttonHolder = document.rootVisualElement.Q<ListView>("ButtonHolder");
 
             playArea.aliceCard = new(playArea.playerBases[players[0]], players[0], "Albany", 0, 0, 0);
             playArea.bobCard = new(playArea.playerBases[players[1]], players[1], "Baltimore", 0, 0, 0);
 
-            ChoiceManager.OnChoices += PromptChoices;
-            ChoiceManager.OnChosen += ClearChoices;
+            ChoiceManager.OnChoices += OnChoices;
+            ChoiceManager.OnChosen += OnChosen;
+            BaseChoiceCommand.OnChoiceFinished += OnMultichoiceSelectionFinish;
+            BaseChoiceCommand.OnNewChoice += OnMultichoiceNewChoice;
 
         }
 
-        private void ClearChoices(IChoosable chosen)
+        private void OnMultichoiceNewChoice(IChoosable chosen)
+        {
+            if (typeof(Card).IsAssignableFrom(chosen.GetType()))
+            {
+                SelectedHighlight(cardToVE[chosen as Card]);
+            }
+        }
+
+        private void OnMultichoiceSelectionFinish(List<IChoosable> chosenList)
+        {
+            foreach (var chosen in chosenList)
+            {
+                if (typeof(Card).IsAssignableFrom(chosen.GetType()))
+                {
+                    Unhighlight(cardToVE[chosen as Card]);
+                }
+
+            }
+        }
+
+     
+
+        private void OnChosen(IChoosable chosen)
         {
             choiceLabel.text = "No active choice";
 
@@ -68,17 +95,54 @@ namespace Petrunity
 
             spawnedButtons.Clear();
 
+
+            foreach (var ve in cardToVE.Values)
+            {
+                Unhighlight(ve);
+            }
+
         }
 
-        private void PromptChoices(IEnumerable<IChoosable> choices, string choiceTitle, Player player)
+        private void OnReadyChange(Permanent permanent, bool ready)
+        {
+            if (!cardToVE.ContainsKey(permanent)) return;
+
+            Debug.Log("CARD FOUND IN ONREADYCHANGE");
+
+            var cardVE = cardToVE[permanent];
+
+            //float oldRot = cardVE.resolvedStyle.rotate.angle.value;
+            float newRot = ready ? 0 : 90;
+
+            cardVE.style.rotate = new(new Angle(newRot));
+        }
+
+        private void OnChoices(IEnumerable<IChoosable> choices, string choiceTitle, Player player)
         {
             //IMPORTANT TO NOTE THAT CHOICE CAN BE NULL
 
             var choiceList = choices.ToList();
 
+            foreach (var choice in choices)
+            {
+                if (choice == null) continue;
+
+                if (typeof(Card).IsAssignableFrom(choice.GetType()))
+                {
+                    var card = choice as Card;
+                    if (cardToVE.ContainsKey(card))
+                    {
+                        Highlight(cardToVE[card]);
+                    }
+                    else
+                    {
+                        Unhighlight(cardToVE[card]);
+                    }
+                }
+                
+            }
+
             choiceLabel.text = choiceTitle;
-
-
 
             buttonHolder.makeItem = () => 
             {
@@ -99,6 +163,24 @@ namespace Petrunity
             buttonHolder.itemsSource = choiceList;
             buttonHolder.Rebuild();
 
+        }
+
+        private void Unhighlight(VisualElement visualElement)
+        {
+            if (visualElement.ClassListContains("Highlighted")) visualElement.RemoveFromClassList("Highlighted");
+            if (visualElement.ClassListContains("Selected")) visualElement.RemoveFromClassList("Selected");
+        }
+
+        private void Highlight(VisualElement visualElement)
+        {
+            visualElement.AddToClassList("Highlighted");
+
+
+        }
+
+        private void SelectedHighlight(VisualElement ve)
+        {
+            ve.AddToClassList("Selected");
         }
 
         private void UnitPlayed(Unit unit)

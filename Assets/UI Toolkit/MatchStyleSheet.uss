@@ -23,6 +23,9 @@
     padding-right: 3px;
     padding-bottom: 3px;
     padding-left: 3px;
+    transition-property: rotate;
+    transition-timing-function: ease-in-out-back;
+    transition-duration: 0.4s;
 }
 
 .SingleSlot {
@@ -84,4 +87,12 @@
 
 .battlefield {
     width: 50%;
+}
+
+.Highlighted {
+    background-color: rgb(255, 250, 172);
+}
+
+.Selected {
+    filter: tint(rgb(121, 144, 255));
 }
