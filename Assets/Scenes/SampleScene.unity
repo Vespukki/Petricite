@@ -918,6 +918,8 @@ MonoBehaviour:
   document: {fileID: 1072865949}
   cardTemplate: {fileID: 9197481963319205126, guid: f4ebdf798c0fb044387f1a6902510986, type: 3}
   buttonTemplate: {fileID: 9197481963319205126, guid: cc6cf0fec9ff5064f9e7b420f58214a9, type: 3}
+  frontSprite: {fileID: 5344444873274896792, guid: 942ae16ac2d9deb48988d731bcac3f93, type: 3}
+  backSprite: {fileID: -1099937666608763551, guid: 1161d57a50a9fc04e8c975024c50437f, type: 3}
 --- !u!114 &1072865949
 MonoBehaviour:
   m_ObjectHideFlags: 0

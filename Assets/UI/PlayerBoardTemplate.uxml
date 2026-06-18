@@ -2,19 +2,19 @@
     <Style src="project://database/Assets/UI%20Toolkit/MatchStyleSheet.uss?fileID=7433441132597879392&amp;guid=f8553b6b051a43b49ad52d2328142f41&amp;type=3#MatchStyleSheet"/>
     <ui:GroupBox name="PlayMat" class="PlayMat" style="width: 100%; height: 100%; align-items: center;">
         <ui:GroupBox name="TopRow" class="HorizontalGroup">
-            <ui:GroupBox name="Battlefield0Zone" class="HorizontalGroup cardHolder battlefield" style="width: 50%;"/>
-            <ui:GroupBox name="Battlefield1Zone" class="HorizontalGroup cardHolder battlefield"/>
+            <Petrunity.ZoneElement name="Battlefield0Zone" class="HorizontalGroup cardHolder battlefield"/>
+            <Petrunity.ZoneElement name="Battlefield1Zone" class="HorizontalGroup cardHolder battlefield"/>
         </ui:GroupBox>
         <ui:GroupBox name="MiddleRow" class="HorizontalGroup">
-            <ui:GroupBox name="LegendZone" class="SingleSlot cardHolder"/>
-            <ui:GroupBox name="ChampionZone" class="SingleSlot cardHolder"/>
-            <ui:GroupBox name="BaseZone" class="HorizontalGroup cardHolder"/>
-            <ui:GroupBox name="MainDeckZone" class="SingleSlot cardHolder"/>
+            <Petrunity.ZoneElement name="LegendZone" class="SingleSlot cardHolder"/>
+            <Petrunity.ZoneElement name="ChampionZone" class="SingleSlot cardHolder"/>
+            <Petrunity.ZoneElement name="BaseZone" class="HorizontalGroup cardHolder" style="max-width: initial; width: 0;"/>
+            <Petrunity.DeckElement name="MainDeckZone" hidden-zone="true" class="SingleSlot cardHolder Deck"/>
         </ui:GroupBox>
         <ui:GroupBox name="BottomRow" class="HorizontalGroup">
-            <ui:GroupBox name="RuneDeckZone" class="SingleSlot cardHolder"/>
-            <ui:GroupBox name="RuneZone" class="HorizontalGroup cardHolder"/>
-            <ui:GroupBox name="TrashZone" class="SingleSlot cardHolder"/>
+            <Petrunity.ZoneElement name="RuneDeckZone" class="SingleSlot cardHolder"/>
+            <Petrunity.ZoneElement name="RuneZone" class="HorizontalGroup cardHolder"/>
+            <Petrunity.DeckElement name="TrashZone" class="SingleSlot cardHolder"/>
         </ui:GroupBox>
     </ui:GroupBox>
 </ui:UXML>

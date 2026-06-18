@@ -14,8 +14,8 @@ namespace Petrunity
         public CommandManager commandManager;
         public PlayArea playArea;
 
-        private Dictionary<Zone, VisualElement> zoneToVE = new();
-        private Dictionary<Card, VisualElement> cardToVE = new();
+        private Dictionary<Zone, ZoneElement> zoneToVE = new();
+        private Dictionary<Card, CardElement> cardToVE = new();
 
         [SerializeField] private UIDocument document;
         [SerializeField] private VisualTreeAsset cardTemplate;
@@ -23,6 +23,9 @@ namespace Petrunity
         public ListView buttonHolder;
         public Label choiceLabel;
         private List<VisualElement> spawnedButtons = new();
+
+        public Sprite frontSprite;
+        public Sprite backSprite;
 
 
         private void Awake()
@@ -57,6 +60,7 @@ namespace Petrunity
             BaseChoiceCommand.OnChoiceFinished += OnMultichoiceSelectionFinish;
             BaseChoiceCommand.OnNewChoice += OnMultichoiceNewChoice;
 
+            document.rootVisualElement.Q<Button>("TempButton").clicked += () => new Unit(playArea.playerMainDecks[players[0]], players[0]);//document.rootVisualElement.Q<DeckElement>("MainDeckZone").Add(new Card);
         }
 
         private void OnMultichoiceNewChoice(IChoosable chosen)
@@ -192,7 +196,7 @@ namespace Petrunity
         }
         private void SpawnCard(Card card)
         {
-            VisualElement newCardVE = cardTemplate.CloneTree();
+            CardElement newCardVE = new(frontSprite, backSprite);
 
             zoneToVE[card.Zone].Add(newCardVE);
             
@@ -208,17 +212,18 @@ namespace Petrunity
         {
             for (int playerIndex = 0; playerIndex < playArea.players.Count; playerIndex++)
             {
+                var player = playArea.players[playerIndex];
 
                 var playerBoard = document.rootVisualElement.Q($"Player{playerIndex}Board");
-                var playerBase = playerBoard.Q("BaseZone");
+                var playerBase = playerBoard.Q<ZoneElement>("BaseZone");
 
                 zoneToVE.Add(playArea.playerBases[playArea.players[playerIndex]], playerBase);
-
+                zoneToVE.Add(playArea.playerMainDecks[player], playerBoard.Q<ZoneElement>("MainDeckZone"));
                 for (int i = 0; i < 2; i++)
                 {
                     var location = playArea.playerBattlefields[playArea.players[playerIndex]][playArea.battlefields[i]];
 
-                    zoneToVE.Add(location, playerBoard.Q($"Battlefield{i}Zone"));
+                    zoneToVE.Add(location, playerBoard.Q<ZoneElement>($"Battlefield{i}Zone"));
                 }
             }
 
