@@ -16,12 +16,27 @@ namespace Petrunity
         /// <param name="child"></param>
         public virtual new void Add(VisualElement child)
         {
-            base.Add(child);
+            ZoneElement parent = null;
 
             if (child is CardElement card)
             {
+
                 card.sprite = hiddenZone ? card.backSprite : card.frontSprite;
+                if (card.parent is ZoneElement)
+                {
+                    parent = card.parent as ZoneElement;
+                }
             }
+
+            base.Add(child);
+
+            parent?.OnGeometryChanged();
+            OnGeometryChanged();
+        }
+
+        public virtual void OnGeometryChanged()
+        {
+
         }
     }
 }

@@ -60,7 +60,7 @@ namespace Petrunity
             BaseChoiceCommand.OnChoiceFinished += OnMultichoiceSelectionFinish;
             BaseChoiceCommand.OnNewChoice += OnMultichoiceNewChoice;
 
-            document.rootVisualElement.Q<Button>("TempButton").clicked += () => new Unit(playArea.playerMainDecks[players[0]], players[0]);//document.rootVisualElement.Q<DeckElement>("MainDeckZone").Add(new Card);
+            document.rootVisualElement.Q<Button>("TempButton").clicked += () => new Unit(playArea.playerHands[players[0]], players[0]);//document.rootVisualElement.Q<DeckElement>("MainDeckZone").Add(new Card);
         }
 
         private void OnMultichoiceNewChoice(IChoosable chosen)
@@ -219,6 +219,7 @@ namespace Petrunity
 
                 zoneToVE.Add(playArea.playerBases[playArea.players[playerIndex]], playerBase);
                 zoneToVE.Add(playArea.playerMainDecks[player], playerBoard.Q<ZoneElement>("MainDeckZone"));
+                zoneToVE.Add(playArea.playerHands[player], document.rootVisualElement.Q<HandElement>($"Hand{playerIndex}Zone"));
                 for (int i = 0; i < 2; i++)
                 {
                     var location = playArea.playerBattlefields[playArea.players[playerIndex]][playArea.battlefields[i]];

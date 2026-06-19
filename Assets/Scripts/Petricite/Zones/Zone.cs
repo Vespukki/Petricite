@@ -9,7 +9,7 @@ namespace Petricite
 
         public string name;
         private int maxCards;
-        private List<Card> cards;
+        public List<Card> cards;
 
         public Player owner;
 

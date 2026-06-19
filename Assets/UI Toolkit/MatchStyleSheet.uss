@@ -113,3 +113,17 @@
     width: 110px;
     margin-right: -109.5px;
 }
+
+.Hand {
+    width: 600px;
+}
+
+.Hand .Card {
+    width: 150px;
+    flex-shrink: 0;
+    margin-right: 0;
+}
+
+.Hand .Card:hover {
+    margin-right: 0;
+}

@@ -2,12 +2,14 @@
     <ui:Template name="PlayerBoardTemplate" src="project://database/Assets/UI/PlayerBoardTemplate.uxml?fileID=9197481963319205126&amp;guid=e6ce1d1b25a1af74fb2fe4b906f5bd32&amp;type=3#PlayerBoardTemplate"/>
     <Style src="project://database/Assets/UI%20Toolkit/MatchStyleSheet.uss?fileID=7433441132597879392&amp;guid=f8553b6b051a43b49ad52d2328142f41&amp;type=3#MatchStyleSheet"/>
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement style="flex-grow: 1; justify-content: space-evenly; align-items: center; align-content: center;">
+        <ui:VisualElement style="flex-grow: 0; justify-content: space-evenly; align-items: center; align-content: center; flex-shrink: 0;">
             <ui:Button text="Add Something to the deck&#10;=" name="TempButton" style="width: 80%; height: 113px; font-size: 26px;"/>
+            <Petrunity.HandElement name="Hand1Zone" class="HorizontalGroup Hand"/>
+            <Petrunity.HandElement name="Hand0Zone" class="HorizontalGroup Hand"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; width: 50%; height: 100%;">
-            <ui:Instance template="PlayerBoardTemplate" name="Player0Board" class="PlayMat" style="height: 50%; width: 100%; align-self: center; rotate: 180deg;"/>
-            <ui:Instance template="PlayerBoardTemplate" name="Player1Board" class="PlayMat" style="height: 50%; width: 100%; align-self: center;"/>
+            <ui:Instance template="PlayerBoardTemplate" name="Player1Board" class="PlayMat" style="height: 50%; width: 100%; align-self: center; rotate: 180deg;"/>
+            <ui:Instance template="PlayerBoardTemplate" name="Player0Board" class="PlayMat" style="height: 50%; width: 100%; align-self: center;"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 0; background-color: rgba(166, 166, 166, 0.24); flex-shrink: 0; width: 20%;">
             <ui:Label text="Label" name="ChoiceLabel"/>
