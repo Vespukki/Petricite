@@ -15,7 +15,7 @@ namespace Petricite
         public Dictionary<Player, Zone> playerBases = new();
         public Dictionary<Player, Zone> playerMainDecks = new();
         public Dictionary<Player, Dictionary<Battlefield, Zone>> playerBattlefields = new();
-        public Dictionary<Player, Zone> playerHands = new();
+        public Dictionary<Player, Hand> playerHands = new();
         public PlayArea(List<Player> newPlayers, List<Battlefield> battlefields)
         {
             this.battlefields = new(battlefields);
@@ -25,7 +25,7 @@ namespace Petricite
 
                 playerBases.Add(player, new Location($"{player.Name}'s base", int.MaxValue, player));
                 playerMainDecks.Add(player, new Zone($"{player.Name}'s Main Deck", int.MaxValue, player));
-                playerHands.Add(player, new Zone($"{player.Name}'s Hand", int.MaxValue, player));
+                playerHands.Add(player, new Hand($"{player.Name}'s Hand", int.MaxValue, player));
 
                 var newDict = new Dictionary<Battlefield, Zone>();
                 foreach (var battlefield in battlefields)

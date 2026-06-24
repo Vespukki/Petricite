@@ -16,6 +16,11 @@ namespace Petricite
             CommandManager.EnqueueTurn(player);
         }
 
+        public Task PreExecute()
+        {
+            return Task.CompletedTask;
+        }
+
         public void Unexecute()
         {
             throw new System.NotImplementedException();

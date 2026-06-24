@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Petricite
 {
@@ -8,12 +9,7 @@ namespace Petricite
 
         public static event Action<IReadyable, bool> OnReady;
 
-        public void SetReady(bool isReady)
-        {
-            OnReady?.Invoke(this, isReady);
-            GameAction<bool, IReadyable> newAction = new("READY", this, new() { this }, isReady);
-            GameAction<bool, IReadyable>.RaiseBeforeAction(newAction);
-        }
+        public List<Ability> Abilities { get; }
 
     }
 }

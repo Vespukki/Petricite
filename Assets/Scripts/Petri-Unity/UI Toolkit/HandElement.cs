@@ -18,11 +18,8 @@ namespace Petrunity
 
         }
 
-        public override void OnGeometryChanged()
+        public void ReadjustHandSize()
         {
-            base.OnGeometryChanged();
-
-            Debug.Log(childCount);
             if (childCount == 0) return;
 
             float w = resolvedStyle.width;
@@ -41,11 +38,30 @@ namespace Petrunity
 
             for (int i = 0; i < childCount; i++)
             {
-                var child = contentContainer[i];
+                var foundChild = contentContainer[i];
 
-                child.style.position = Position.Absolute;
-                child.style.left = i * spacing;
+                foundChild.style.position = Position.Absolute;
+                foundChild.style.left = i * spacing;
             }
+        }
+
+        public override void OnChildAdded(VisualElement child)
+        {
+            base.OnChildAdded(child);
+
+
+            ReadjustHandSize();
+        }
+
+        public override void OnChildRemoved(VisualElement child)
+        {
+            base.OnChildRemoved(child);
+
+
+            child.style.position = StyleKeyword.Null;
+            child.style.left = StyleKeyword.Null;
+
+            ReadjustHandSize();
         }
     }
 }

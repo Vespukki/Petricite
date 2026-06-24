@@ -3,26 +3,20 @@ using System.Collections.Generic;
 
 namespace Petricite
 {
-    public class Zone : IChoosable
+    public class Zone : GenericZone<Card>
     {
-        public string Name => name;
-
-        public string name;
-        private int maxCards;
-        public List<Card> cards;
+       
+       
+        public List<Card> cards => heldList;
 
         public Player owner;
 
         public int MaxCards => Query<int, Zone>.GetValue(this, "MAX_CARDS", maxCards);
 
         public int CardCount => cards.Count;
-        public Zone(string name, int maxCards, Player owner)
+        public Zone(string name, int maxCards, Player owner) : base(name, maxCards)
         {
             this.owner = owner;
-            this.name = name;
-            this.maxCards = maxCards;
-
-            cards = new();
         }
 
         public void TryAddCard(Card card)

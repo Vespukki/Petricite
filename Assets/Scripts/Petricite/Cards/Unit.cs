@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Petricite
@@ -10,7 +11,8 @@ namespace Petricite
         public delegate void unitHandler(Unit unit);
         public static event unitHandler OnUnitPlayed;
 
-        public Unit(Zone zone, Player controller, string name = "UNNAMED PLAYABLE CARD", int powerCost = 0, int energyCost = 0, int might = 0) : base(zone,controller, name, powerCost, energyCost)
+        public Unit(Zone zone, Player controller, string name = "UNNAMED UNIT", int powerCost = 0, int energyCost = 0,
+            int might = 0, List<Ability> abilities = null) : base(zone,controller, name, powerCost, energyCost, abilities)
         {
             this.might = might;
             Filter<Unit>.OnFilter += OnFilter;

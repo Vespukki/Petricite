@@ -30,11 +30,15 @@ namespace Petrunity
 
             base.Add(child);
 
-            parent?.OnGeometryChanged();
-            OnGeometryChanged();
+            parent?.OnChildRemoved(child);
+            OnChildAdded(child);
         }
 
-        public virtual void OnGeometryChanged()
+        public virtual void OnChildRemoved(VisualElement child)
+        {
+
+        }
+        public virtual void OnChildAdded(VisualElement child)
         {
 
         }

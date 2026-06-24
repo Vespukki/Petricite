@@ -9,11 +9,11 @@ namespace Petricite
     public class MultichoiceCommand<T> : BaseChoiceCommand, ICommand where T : class, IChoosable
     {
         public List<T> selected = new();
-        Filter<T>.testDelegate test;
+        Func<T, bool> test;
         private int minChoices, maxChoices;
         private Player player;
 
-        public MultichoiceCommand(Filter<T>.testDelegate test, int minChoices, int maxChoices, Player player)
+        public MultichoiceCommand(Func<T, bool> test, int minChoices, int maxChoices, Player player)
         {
             this.player = player;
             this.test = test;
@@ -47,6 +47,11 @@ namespace Petricite
         public void Unexecute()
         {
             throw new System.NotImplementedException();
+        }
+
+        public Task PreExecute()
+        {
+            return Task.CompletedTask;
         }
     }
 }

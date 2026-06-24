@@ -8,6 +8,7 @@ namespace Petricite
     public class CommandManager
     {
         private static Stack<ICommand> commandStack = new();
+        private static Queue<ICommand> pending = new();
         private static LinkedList<Player> turnOrder = new();
 
         public static Player currentTurnPlayer;
@@ -39,17 +40,24 @@ namespace Petricite
 
         public static void PushCommand(ICommand command)
         {
+            pending.Enqueue(command);
             commandStack.Push(command);
         }
 
-        public async void ProcessCommand()
+        public async void ProcessCommand()//ok now how do i make it so that a card is a command that is playable. also side note tapped cards should be a property of a zone maybe? idk
         {
-            if (commandStack.Count == 0)
+            if (pending.Count != 0)
             {
-                PushCommand(GetTurnCommand());//Now i must add player turns so its only 1 persons turn at a time. this includes choices being sent to a particular player
+                await pending.Dequeue().PreExecute();
             }
-            await commandStack.Pop().Execute();
-
+            else if (commandStack.Count != 0)
+            {
+                await commandStack.Pop().Execute();
+            }
+            else
+            {
+                PushCommand(GetTurnCommand());
+            }
             ProcessCommand();
         }
 

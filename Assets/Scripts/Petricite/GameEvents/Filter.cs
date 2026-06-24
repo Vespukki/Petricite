@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,16 +8,13 @@ namespace Petricite
 {
     public class Filter<T>
     {
-        public delegate void filterDelegate(Filter<T> filter);
-        public delegate bool testDelegate(T item);
+        public static event Action<Filter<T>> OnFilter;
 
-        public static event filterDelegate OnFilter;
-
-        public testDelegate test;
+        public Func<T, bool> test;
 
         public List<T> value;
 
-        public Filter(testDelegate test)
+        public Filter(Func<T, bool> test)
         {
             this.test = test;
             this.value = new List<T>();

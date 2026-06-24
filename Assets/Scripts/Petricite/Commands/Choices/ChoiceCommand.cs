@@ -28,5 +28,10 @@ namespace Petricite
         {
             throw new System.NotImplementedException();
         }
+
+        public Task PreExecute()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

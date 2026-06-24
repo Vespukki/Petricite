@@ -1,15 +1,21 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace Petricite
 {
     /// <summary>
     /// Units, Gear, and Spells are playable cards
     /// </summary>
-    public class PlayableCard : Card
+    public abstract class PlayableCard : Card, ICommand
     {
         protected int energyCost;
         protected int powerCost;
 
-        public delegate void cardPlayedHandler(PlayableCard card);
-        public static event cardPlayedHandler OnCardPlayed;
+        public static event Action<PlayableCard> OnCardPlayed;
+
+
+        protected void InvokeOnCardPlayed(PlayableCard card) => OnCardPlayed?.Invoke(card);
 
         /// <summary>
         /// note that instantiating a card is playing the card?? for now at least
@@ -20,7 +26,16 @@ namespace Petricite
             this.powerCost = powerCost;
             this.controller = controller;
 
-            OnCardPlayed?.Invoke(this);
+            Filter<PlayableCard>.OnFilter += OnFilter;
+
+        }
+
+        private void OnFilter(Filter<PlayableCard> filter)
+        {
+            if (filter.test(this))
+            {
+                filter.value.Add(this);
+            }
         }
 
         public int GetEnergyCost()
@@ -39,6 +54,15 @@ namespace Petricite
             Query<int, PlayableCard>.RaiseQuery(query);
 
             return query.value;
+        }
+
+        public abstract Task PreExecute();
+
+        public abstract Task Execute();
+
+        public void Unexecute()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

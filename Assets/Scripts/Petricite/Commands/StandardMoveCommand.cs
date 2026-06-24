@@ -7,6 +7,8 @@ namespace Petricite
     public class StandardMoveCommand : ICommand
     {
         private Player player;
+        private MultichoiceCommand<Unit> unitChoices;
+        private FilterChoiceCommand<Location> locationChoice;
         public StandardMoveCommand(Player player)
         {
             this.player = player;
@@ -22,25 +24,31 @@ namespace Petricite
             return false;
         }
 
-        public async Task Execute()
+        public Task Execute()
         {
-            Filter<Location> filter = new((loc) => loc.MaxCards > loc.CardCount && loc.owner == player);
-            FilterChoiceCommand<Location> locationChoice = new(player, filter, $"Where to move?");
-            await locationChoice.Execute();
-
-            MultichoiceCommand<Unit> unitChoices = new((unit) => UnitTest(locationChoice.result, unit), 1, int.MaxValue, player);
-
-            await unitChoices.Execute();
-
             foreach (var unit in unitChoices.selected)
             {
                 unit.Ready = false;
                 unit.Zone = locationChoice.result;
             }
+
+            return Task.CompletedTask;
         }
 
         public void Unexecute()
         {
+        }
+
+        public async Task PreExecute()// maybe should be restricted to only having one choice per task? like this double one might cause problems
+        {
+            Filter<Location> filter = new((loc) => loc.MaxCards > loc.CardCount && loc.owner == player);
+            locationChoice = new(player, filter, $"Where to move?");
+
+            await locationChoice.Execute();
+
+            unitChoices = new((unit) => UnitTest(locationChoice.result, unit), 1, int.MaxValue, player);
+
+            await unitChoices.Execute();
         }
     }
 }

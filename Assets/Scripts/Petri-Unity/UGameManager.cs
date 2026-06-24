@@ -2,6 +2,7 @@ using Petricite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,7 +19,6 @@ namespace Petrunity
         private Dictionary<Card, CardElement> cardToVE = new();
 
         [SerializeField] private UIDocument document;
-        [SerializeField] private VisualTreeAsset cardTemplate;
         [SerializeField] private VisualTreeAsset buttonTemplate;
         public ListView buttonHolder;
         public Label choiceLabel;
@@ -52,7 +52,8 @@ namespace Petrunity
             choiceLabel = document.rootVisualElement.Q<Label>("ChoiceLabel");
             buttonHolder = document.rootVisualElement.Q<ListView>("ButtonHolder");
 
-            playArea.aliceCard = new(playArea.playerBases[players[0]], players[0], "Albany", 0, 0, 0);
+            playArea.aliceCard = new(playArea.playerBases[players[0]], players[0], "Albany", 0, 0, 0, new() {new("TEMP ABILITY", TempAlicePreTask, TempAliceTask)});
+
             playArea.bobCard = new(playArea.playerBases[players[1]], players[1], "Baltimore", 0, 0, 0);
 
             ChoiceManager.OnChoices += OnChoices;
@@ -61,6 +62,24 @@ namespace Petrunity
             BaseChoiceCommand.OnNewChoice += OnMultichoiceNewChoice;
 
             document.rootVisualElement.Q<Button>("TempButton").clicked += () => new Unit(playArea.playerHands[players[0]], players[0]);//document.rootVisualElement.Q<DeckElement>("MainDeckZone").Add(new Card);
+        }
+
+        public async Task TempAliceTask(Ability ability)
+        {
+            Debug.Log("Ability Chosen!!");
+        }
+        public async Task TempAlicePreTask(Ability ability)
+        {
+            Debug.Log("Ability Finalized!!");
+
+            FilterChoiceCommand<Unit> selfChoice = new(ability.source.controller, new((card) => card == ability.source), "Pay Exhaust cost");
+            await selfChoice.Execute();
+
+            (selfChoice.result as IReadyable).Ready = false;
+
+            FilterChoiceCommand<Location> locationChoice = new(playArea.aliceCard.controller, new((L) => true), "Temp ability choice");
+
+            await locationChoice.Execute();
         }
 
         private void OnMultichoiceNewChoice(IChoosable chosen)
@@ -206,6 +225,9 @@ namespace Petrunity
         private void CardMoved(Card card, Zone newZone)
         {
             zoneToVE[newZone].Add(cardToVE[card]);
+
+            Debug.Log(zoneToVE[newZone].childCount + " swag");
+
         }
 
         public void ParsePlayArea()

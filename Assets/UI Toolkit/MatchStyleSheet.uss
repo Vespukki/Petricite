@@ -15,17 +15,10 @@
     width: 110px;
     height: auto;
     aspect-ratio: 0.7142857;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
     padding-top: 3px;
     padding-right: 3px;
     padding-bottom: 3px;
     padding-left: 3px;
-    transition-property: rotate;
-    transition-timing-function: ease-in-out-back;
-    transition-duration: 0.4s;
 }
 
 .SingleSlot {
@@ -102,13 +95,6 @@
 
 
 
-.tempCard {
-    background-image: url("project://database/Assets/Sprites/RB%20cardback.png?fileID=-1099937666608763551&guid=1161d57a50a9fc04e8c975024c50437f&type=3#RB cardback_0");
-    width: 100%;
-    height: 100%;
-    margin-right: -232px;
-}
-
 .Deck .Card {
     width: 110px;
     margin-right: -109.5px;
@@ -121,9 +107,7 @@
 .Hand .Card {
     width: 150px;
     flex-shrink: 0;
-    margin-right: 0;
 }
 
 .Hand .Card:hover {
-    margin-right: 0;
 }
