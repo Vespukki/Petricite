@@ -8,12 +8,10 @@ namespace Petricite
         private string name;
         public string Name => name;
 
-        private List<Protocard> protoCards;
 
-        public Player(string name, List<Protocard> protoCards)
+        public Player(string name)
         {
             this.name = name;
-            this.protoCards = protoCards;
         }
 
     }

@@ -7,9 +7,11 @@ namespace Petricite
     {
         public bool Ready { get; set; }
 
-        public static event Action<IReadyable, bool> OnReady;
+        public static event Action<IReadyable, bool> OnReadyChange;
 
-        public List<Ability> Abilities { get; }
-
+        protected static void InvokeOnReady(IReadyable obj, bool ready)
+        {
+            OnReadyChange?.Invoke(obj, ready);
+        }
     }
 }

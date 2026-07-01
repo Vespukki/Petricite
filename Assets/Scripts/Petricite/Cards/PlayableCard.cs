@@ -7,12 +7,12 @@ namespace Petricite
     /// <summary>
     /// Units, Gear, and Spells are playable cards
     /// </summary>
-    public abstract class PlayableCard : Card, ICommand
+    public abstract class PlayableCard : Card, ICommand //The command is called when you play the card (move it from a playable zone to a board zone)
     {
         protected int energyCost;
         protected int powerCost;
 
-        public static event Action<PlayableCard> OnCardPlayed;
+        public static GameEvent<PlayableCard> OnCardPlayed = new();
 
 
         protected void InvokeOnCardPlayed(PlayableCard card) => OnCardPlayed?.Invoke(card);
@@ -20,7 +20,8 @@ namespace Petricite
         /// <summary>
         /// note that instantiating a card is playing the card?? for now at least
         /// </summary>
-        public PlayableCard(Zone zone, Player controller, string name = "UNNAMED PLAYABLE CARD", int powerCost = 0, int energyCost = 0) : base(zone, name)
+        public PlayableCard(Zone zone, Player controller, string name = "UNNAMED PLAYABLE CARD", string id = "NO_ID", int powerCost = 0, int energyCost = 0, Action<Card> initAction = null)
+            : base(zone, controller, name, id, initAction)
         {
             this.energyCost = energyCost;
             this.powerCost = powerCost;
@@ -64,5 +65,6 @@ namespace Petricite
         {
             throw new System.NotImplementedException();
         }
+
     }
 }

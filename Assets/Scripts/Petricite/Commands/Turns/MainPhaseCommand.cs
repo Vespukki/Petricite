@@ -43,13 +43,13 @@ namespace Petricite
                 }
             }
 
-            //Abilities
+           /* //Abilities
             Filter<Ability> abilityFilter = new((a) => a.source.controller == player);
             List<Ability> abilities = abilityFilter.GetValid();
             foreach (var ability in abilities)
             {
                 choices.Add(new(ability, ability.Name));
-            }
+            }*/
 
 
             choices.Add(endTurnChoice);

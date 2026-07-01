@@ -1,4 +1,5 @@
 using Petricite;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,8 +15,7 @@ namespace Petrunity
 
         public CardElement(Sprite frontSprite) : this()
         {
-            sprite = frontSprite;
-            this.frontSprite = frontSprite;
+            ReloadSprite(frontSprite);
         }
 
         public CardElement(Sprite frontSprite, Sprite backSprite) : this(frontSprite)
@@ -27,5 +27,11 @@ namespace Petrunity
         public Sprite frontSprite;
         [UxmlAttribute]
         public Sprite backSprite;
+
+        public void ReloadSprite(Sprite newFront)
+        {
+            frontSprite = newFront;
+            sprite = newFront;
+        }
     }
 }

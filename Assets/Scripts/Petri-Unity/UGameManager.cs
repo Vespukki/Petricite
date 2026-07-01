@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 namespace Petrunity
@@ -33,8 +34,8 @@ namespace Petrunity
             List<Player> players = new();
             List<Battlefield> battlefields = new();
 
-            players.Add(new("Alice", new()));
-            players.Add(new("Bob", new()));
+            players.Add(new("Alice"));
+            players.Add(new("Bob"));
 
             battlefields.Add(new("Zaun Warrens"));
             battlefields.Add(new("The Papertree"));
@@ -44,33 +45,40 @@ namespace Petrunity
 
             commandManager = new(players);
 
-            Unit.OnUnitPlayed += UnitPlayed;
+            Unit.OnUnitCreated += UnitCreated;
             Card.OnZoneChange += CardMoved;
 
-            Permanent.OnReadyChange += OnReadyChange;
+            IReadyable.OnReadyChange += OnReadyChange;
 
             choiceLabel = document.rootVisualElement.Q<Label>("ChoiceLabel");
             buttonHolder = document.rootVisualElement.Q<ListView>("ButtonHolder");
 
-            playArea.aliceCard = new(playArea.playerBases[players[0]], players[0], "Albany", 0, 0, 0, new() {new("TEMP ABILITY", TempAlicePreTask, TempAliceTask)});
+            playArea.aliceCard = new(playArea.playerBases[players[0]], players[0], "Albany", "NO_ID", 0, 0, 0, TempAliceInit);// new() { new("TEMP ABILITY", TempAlicePreTask, TempAliceTask) }
 
-            playArea.bobCard = new(playArea.playerBases[players[1]], players[1], "Baltimore", 0, 0, 0);
+            playArea.bobCard = new(playArea.playerBases[players[1]], players[1], "Baltimore", "NO_ID", 0, 0, 0);
 
             ChoiceManager.OnChoices += OnChoices;
             ChoiceManager.OnChosen += OnChosen;
             BaseChoiceCommand.OnChoiceFinished += OnMultichoiceSelectionFinish;
             BaseChoiceCommand.OnNewChoice += OnMultichoiceNewChoice;
 
-            document.rootVisualElement.Q<Button>("TempButton").clicked += () => new Unit(playArea.playerHands[players[0]], players[0]);//document.rootVisualElement.Q<DeckElement>("MainDeckZone").Add(new Card);
+            document.rootVisualElement.Q<Button>("TempButton").clicked += () => CardFactory.CreateUnit("ogn-001", playArea.playerHands[players[0]], players[0]);//document.rootVisualElement.Q<DeckElement>("MainDeckZone").Add(new Card);
         }
 
-        public async Task TempAliceTask(Ability ability)
+        public void TempAliceInit(Card card)// ok now its time to go back to card factory
         {
-            Debug.Log("Ability Chosen!!");
-        }
-        public async Task TempAlicePreTask(Ability ability)
-        {
-            Debug.Log("Ability Finalized!!");
+            void onPlay(PlayableCard playable)
+            {
+                Debug.Log($"On play rule! with {playable.Name}");
+
+                if (playable == card)
+                {
+                    Debug.Log($"On play rule and its me! {playable.Name}");
+                }
+            }
+
+            PlayArea.AddRule(PlayableCard.OnCardPlayed.CreateRule(card, onPlay));
+            /*Debug.Log("Ability Finalized!!");
 
             FilterChoiceCommand<Unit> selfChoice = new(ability.source.controller, new((card) => card == ability.source), "Pay Exhaust cost");
             await selfChoice.Execute();
@@ -79,7 +87,7 @@ namespace Petrunity
 
             FilterChoiceCommand<Location> locationChoice = new(playArea.aliceCard.controller, new((L) => true), "Temp ability choice");
 
-            await locationChoice.Execute();
+            await locationChoice.Execute();*/
         }
 
         private void OnMultichoiceNewChoice(IChoosable chosen)
@@ -126,18 +134,21 @@ namespace Petrunity
 
         }
 
-        private void OnReadyChange(Permanent permanent, bool ready)
+        private void OnReadyChange(IReadyable readyable, bool ready)
         {
-            if (!cardToVE.ContainsKey(permanent)) return;
+            if (readyable is Card permanent)
+            {
+                if (!cardToVE.ContainsKey(permanent)) return;
 
-            Debug.Log("CARD FOUND IN ONREADYCHANGE");
+                Debug.Log("CARD FOUND IN ONREADYCHANGE");
 
-            var cardVE = cardToVE[permanent];
+                var cardVE = cardToVE[permanent];
 
-            //float oldRot = cardVE.resolvedStyle.rotate.angle.value;
-            float newRot = ready ? 0 : 90;
+                //float oldRot = cardVE.resolvedStyle.rotate.angle.value;
+                float newRot = ready ? 0 : 90;
 
-            cardVE.style.rotate = new(new Angle(newRot));
+                cardVE.style.rotate = new(new Angle(newRot));
+            }
         }
 
         private void OnChoices(IEnumerable<IChoosable> choices, string choiceTitle, Player player)
@@ -206,7 +217,7 @@ namespace Petrunity
             ve.AddToClassList("Selected");
         }
 
-        private void UnitPlayed(Unit unit)
+        private void UnitCreated(Unit unit)
         {
             if (zoneToVE[unit.Zone] != null)
             {
@@ -215,11 +226,20 @@ namespace Petrunity
         }
         private void SpawnCard(Card card)
         {
+            
             CardElement newCardVE = new(frontSprite, backSprite);
 
             zoneToVE[card.Zone].Add(newCardVE);
             
             cardToVE.Add(card, newCardVE);
+
+            Addressables.LoadAssetAsync<Sprite>(card.id).Completed += (handle) =>
+            {
+                if (handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                {
+                    newCardVE.ReloadSprite(handle.Result);
+                }
+            };
         }
 
         private void CardMoved(Card card, Zone newZone)

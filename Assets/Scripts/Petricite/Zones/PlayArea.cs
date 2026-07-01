@@ -16,6 +16,18 @@ namespace Petricite
         public Dictionary<Player, Zone> playerMainDecks = new();
         public Dictionary<Player, Dictionary<Battlefield, Zone>> playerBattlefields = new();
         public Dictionary<Player, Hand> playerHands = new();
+
+        private static List<Rule> rules = new();
+        public static void AddRule(Rule rule)
+        {
+            rules.Add(rule);
+        }
+
+        public static void RemoveRule(Rule rule)
+        {
+            rules.Remove(rule);
+        }
+
         public PlayArea(List<Player> newPlayers, List<Battlefield> battlefields)
         {
             this.battlefields = new(battlefields);

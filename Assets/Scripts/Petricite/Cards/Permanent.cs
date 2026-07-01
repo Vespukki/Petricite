@@ -8,9 +8,6 @@ namespace Petricite
     {
         protected bool ready = true;
 
-        private List<Ability> abilities = new();
-        public List<Ability> Abilities => abilities;
-
         public static event Action<Permanent,bool> OnReadyChange;
         private Filter<Location> playableLocationFilter;
         private FilterChoiceCommand<Location> locationChoice;
@@ -19,7 +16,7 @@ namespace Petricite
             get => ready;
             set 
             {
-                OnReadyChange?.Invoke(this, value);
+                IReadyable.InvokeOnReady(this, value);
                 ready = value;
             } 
             
@@ -42,16 +39,9 @@ namespace Petricite
         }
 
         
-        public Permanent(Zone zone, Player controller, string name = "UNNAMED PLAYABLE CARD", int powerCost = 0, int energyCost = 0,
-            List<Ability> abilities = null) : base(zone, controller, name, powerCost, energyCost)
+        public Permanent(Zone zone, Player controller, string name = "UNNAMED PLAYABLE CARD", string id = "NO_ID", int powerCost = 0, int energyCost = 0,
+            Action<Card> initAction = null) : base(zone, controller, name, id, powerCost, energyCost, initAction)
         {
-            abilities ??= new();
-
-            foreach (var ability in abilities)
-            {
-                ability.source = this;
-            }
-            this.abilities = abilities;
         }
 
     }

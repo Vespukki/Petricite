@@ -23,12 +23,12 @@ namespace Petrunity
         {
             ChoiceManager.OnChoices += OnChoices;
             ChoiceManager.OnChosen += OnChosen;
-            Permanent.OnReadyChange += OnReadyChange;
+            IReadyable.OnReadyChange += OnReadyChange;
             image = GetComponentInChildren<Image>();
             baseColor = image.color;
         }
 
-        private void OnReadyChange(Permanent permanent, bool ready)
+        private void OnReadyChange(IReadyable permanent, bool ready)
         {
             Debug.Log("ready changed");
             if (permanent != card) return;
