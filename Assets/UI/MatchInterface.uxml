@@ -5,7 +5,10 @@
         <ui:VisualElement style="flex-grow: 0; justify-content: space-evenly; align-items: center; align-content: center; flex-shrink: 0;">
             <ui:Button text="Add Something to the deck&#10;=" name="TempButton" style="width: 80%; height: 113px; font-size: 26px;"/>
             <Petrunity.HandElement name="Hand1Zone" class="HorizontalGroup Hand"/>
+            <Petrunity.PoolRouterElement name="PoolRouter1" class="Pool"/>
+            <Petrunity.PoolRouterElement name="PoolRouter0" class="Pool"/>
             <Petrunity.HandElement name="Hand0Zone" class="HorizontalGroup Hand"/>
+            <ui:Button text="Channel" name="ChannelButton" style="width: 80%; height: 113px; font-size: 26px;"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; width: 50%; height: 100%;">
             <ui:Instance template="PlayerBoardTemplate" name="Player1Board" class="PlayMat" style="height: 50%; width: 100%; align-self: center; rotate: 180deg;"/>

@@ -28,6 +28,8 @@ namespace Petrunity
         public Sprite frontSprite;
         public Sprite backSprite;
 
+        public Dictionary<Player, PoolRouterElement> poolRouters = new();
+
 
         private void Awake()
         {
@@ -45,7 +47,7 @@ namespace Petrunity
 
             commandManager = new(players);
 
-            Unit.OnUnitCreated += UnitCreated;
+            Card.OnCardCreated += CardCreated;
             Card.OnZoneChange += CardMoved;
 
             IReadyable.OnReadyChange += OnReadyChange;
@@ -57,12 +59,22 @@ namespace Petrunity
 
             playArea.bobCard = new(playArea.playerBases[players[1]], players[1], "Baltimore", "NO_ID", 0, 0, 0);
 
+            foreach (var player in players)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    playArea.playerRuneDecks[player].cards.Add(CardFactory.CreateRune("ogn-007", playArea.playerRuneDecks[player], player));
+                }
+            }
+            
             ChoiceManager.OnChoices += OnChoices;
             ChoiceManager.OnChosen += OnChosen;
             BaseChoiceCommand.OnChoiceFinished += OnMultichoiceSelectionFinish;
             BaseChoiceCommand.OnNewChoice += OnMultichoiceNewChoice;
 
             document.rootVisualElement.Q<Button>("TempButton").clicked += () => CardFactory.CreateUnit("ogn-001", playArea.playerHands[players[0]], players[0]);//document.rootVisualElement.Q<DeckElement>("MainDeckZone").Add(new Card);
+            document.rootVisualElement.Q<Button>("ChannelButton").clicked += () => playArea.Channel(players[0]);
+            
         }
 
         public void TempAliceInit(Card card)// ok now its time to go back to card factory
@@ -78,16 +90,6 @@ namespace Petrunity
             }
 
             PlayArea.AddRule(PlayableCard.OnCardPlayed.CreateRule(card, onPlay));
-            /*Debug.Log("Ability Finalized!!");
-
-            FilterChoiceCommand<Unit> selfChoice = new(ability.source.controller, new((card) => card == ability.source), "Pay Exhaust cost");
-            await selfChoice.Execute();
-
-            (selfChoice.result as IReadyable).Ready = false;
-
-            FilterChoiceCommand<Location> locationChoice = new(playArea.aliceCard.controller, new((L) => true), "Temp ability choice");
-
-            await locationChoice.Execute();*/
         }
 
         private void OnMultichoiceNewChoice(IChoosable chosen)
@@ -217,17 +219,17 @@ namespace Petrunity
             ve.AddToClassList("Selected");
         }
 
-        private void UnitCreated(Unit unit)
+        private void CardCreated(Card card)
         {
-            if (zoneToVE[unit.Zone] != null)
+            if (zoneToVE[card.Zone] != null)
             {
-                SpawnCard(unit);
+                SpawnCard(card);
             }
         }
         private void SpawnCard(Card card)
         {
             
-            CardElement newCardVE = new(frontSprite, backSprite);
+            CardElement newCardVE = new(frontSprite);
 
             zoneToVE[card.Zone].Add(newCardVE);
             
@@ -256,12 +258,18 @@ namespace Petrunity
             {
                 var player = playArea.players[playerIndex];
 
+                var router = document.rootVisualElement.Q<PoolRouterElement>($"PoolRouter{playerIndex}");
+                poolRouters[player] = router;
+                router.Initialize(new() { Domain.Fury, Domain.Body }, player);
+
                 var playerBoard = document.rootVisualElement.Q($"Player{playerIndex}Board");
                 var playerBase = playerBoard.Q<ZoneElement>("BaseZone");
 
                 zoneToVE.Add(playArea.playerBases[playArea.players[playerIndex]], playerBase);
                 zoneToVE.Add(playArea.playerMainDecks[player], playerBoard.Q<ZoneElement>("MainDeckZone"));
                 zoneToVE.Add(playArea.playerHands[player], document.rootVisualElement.Q<HandElement>($"Hand{playerIndex}Zone"));
+                zoneToVE.Add(playArea.playerRuneDecks[player], playerBoard.Q<ZoneElement>("RuneDeckZone"));
+                zoneToVE.Add(playArea.playerRuneZones[player], playerBoard.Q<ZoneElement>("RuneZone"));
                 for (int i = 0; i < 2; i++)
                 {
                     var location = playArea.playerBattlefields[playArea.players[playerIndex]][playArea.battlefields[i]];

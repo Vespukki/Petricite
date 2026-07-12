@@ -26,6 +26,7 @@ namespace Petricite
                 }
             }
 
+            player.ClearResources();
             //Then down here the expiration step would happen
 
             CommandManager.StartNextTurn();

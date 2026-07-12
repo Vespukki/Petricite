@@ -8,12 +8,12 @@
         <ui:GroupBox name="MiddleRow" class="HorizontalGroup">
             <Petrunity.ZoneElement name="LegendZone" class="SingleSlot cardHolder"/>
             <Petrunity.ZoneElement name="ChampionZone" class="SingleSlot cardHolder"/>
-            <Petrunity.ZoneElement name="BaseZone" class="HorizontalGroup cardHolder" style="max-width: initial; width: 0;"/>
+            <Petrunity.ZoneElement name="BaseZone" class="HorizontalGroup cardHolder" style="width: 0; max-width: initial;"/>
             <Petrunity.DeckElement name="MainDeckZone" hidden-zone="true" class="SingleSlot cardHolder Deck"/>
         </ui:GroupBox>
         <ui:GroupBox name="BottomRow" class="HorizontalGroup">
-            <Petrunity.ZoneElement name="RuneDeckZone" class="SingleSlot cardHolder"/>
-            <Petrunity.ZoneElement name="RuneZone" class="HorizontalGroup cardHolder"/>
+            <Petrunity.ZoneElement name="RuneDeckZone" hidden-zone="true" back-sprite="project://database/Assets/Sprites/Rune%20Cardback.png?fileID=2471570154926395099&amp;guid=f17e7b9c8e16b264484705eb7f388c26&amp;type=3#Rune Cardback_0" class="SingleSlot cardHolder Deck"/>
+            <Petrunity.ZoneElement name="RuneZone" class="HorizontalGroup cardHolder" style="width: 0; max-width: initial;"/>
             <Petrunity.DeckElement name="TrashZone" class="SingleSlot cardHolder"/>
         </ui:GroupBox>
     </ui:GroupBox>

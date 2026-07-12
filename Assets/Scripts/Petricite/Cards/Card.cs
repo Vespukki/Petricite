@@ -11,7 +11,8 @@ namespace Petricite
         public string Name => name;
 
         public static event Action<Card, Zone> OnZoneChange;
-      
+        public static event Action<Card> OnCardCreated;
+
         private Zone zone;
 
         public Zone Zone
@@ -22,10 +23,13 @@ namespace Petricite
             }
             set
             {
+                zone.cards.Remove(this);
                 zone = value;
+                value.cards.Add(this);
                 OnZoneChange?.Invoke(this, value);
             }
         }
+
 
         public Card(Zone zone, Player controller, string name = "UNNAMED CARD", string id = "NO_ID", Action<Card> initAction = null)
         {
@@ -38,6 +42,7 @@ namespace Petricite
 
             Filter<Card>.OnFilter += OnFilter;
             initAction(this);
+            OnCardCreated?.Invoke(this);
         }
 
         private void OnFilter(Filter<Card> filter)

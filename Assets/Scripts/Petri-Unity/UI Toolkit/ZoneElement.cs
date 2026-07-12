@@ -1,3 +1,5 @@
+using Petricite;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,6 +10,8 @@ namespace Petrunity
     {
         [UxmlAttribute]
         public bool hiddenZone;
+        [UxmlAttribute]
+        public Sprite backSprite;
 
 
         /// <summary>
@@ -20,8 +24,7 @@ namespace Petrunity
 
             if (child is CardElement card)
             {
-
-                card.sprite = hiddenZone ? card.backSprite : card.frontSprite;
+                card.onSpriteUpdated += UpdateCardSprite;
                 if (card.parent is ZoneElement)
                 {
                     parent = card.parent as ZoneElement;
@@ -34,13 +37,21 @@ namespace Petrunity
             OnChildAdded(child);
         }
 
+        private void UpdateCardSprite(CardElement cardElement, Sprite sprite)
+        {
+            cardElement.sprite = hiddenZone ? backSprite : sprite;
+        }
+
         public virtual void OnChildRemoved(VisualElement child)
         {
 
         }
         public virtual void OnChildAdded(VisualElement child)
         {
-
+            if (child is CardElement card)
+            {
+                UpdateCardSprite(card, card.frontSprite);
+            }
         }
     }
 }

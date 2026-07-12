@@ -8,6 +8,8 @@ namespace Petrunity
     [UxmlElement]
     public partial class CardElement : Image
     {
+        public event Action<CardElement, Sprite> onSpriteUpdated;
+
         public CardElement()
         {
             AddToClassList("Card");
@@ -15,23 +17,20 @@ namespace Petrunity
 
         public CardElement(Sprite frontSprite) : this()
         {
-            ReloadSprite(frontSprite);
+            this.frontSprite = frontSprite;
+            sprite = frontSprite;
         }
 
-        public CardElement(Sprite frontSprite, Sprite backSprite) : this(frontSprite)
-        {
-            this.backSprite = backSprite;
-        }
+        
 
         [UxmlAttribute]
         public Sprite frontSprite;
-        [UxmlAttribute]
-        public Sprite backSprite;
+       
 
         public void ReloadSprite(Sprite newFront)
         {
-            frontSprite = newFront;
-            sprite = newFront;
+            frontSprite = newFront; //Ok now we gotta make a channel method yay
+            onSpriteUpdated?.Invoke(this, newFront);
         }
     }
 }
